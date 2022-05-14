@@ -5,13 +5,7 @@ const mongoose = require('mongoose');
 const cors = require("cors");
 require('dotenv').config();
 
-const corsOptions = {
-    origin: '*',
-    credentials: true,
-    optionSuccessStatus: 200,
-    'Access-Control-Allow-Origin': '*'
-  }
-app.use(cors(corsOptions))
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 // app.use(express.static('public'));
