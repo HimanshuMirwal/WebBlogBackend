@@ -5,7 +5,12 @@ const mongoose = require('mongoose');
 const cors = require("cors");
 require('dotenv').config();
 
-app.use(cors());
+const corsOptions = {
+    origin: '*',
+    credentials: true,
+    optionSuccessStatus: 200
+  }
+app.use(cors(corsOptions))
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 // app.use(express.static('public'));
