@@ -8,7 +8,8 @@ require('dotenv').config();
 const corsOptions = {
     origin: '*',
     credentials: true,
-    optionSuccessStatus: 200
+    optionSuccessStatus: 200,
+    'Access-Control-Allow-Origin': '*'
   }
 app.use(cors(corsOptions))
 app.use(bodyParser.urlencoded({ extended: false }));
