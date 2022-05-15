@@ -47,6 +47,6 @@ app.use("/notice",Notice);
 app.get("/", (req, res)=>{
     res.send("<h1> WebBlog </h1>");
 })
-app.listen(process.env.PORT||8000, function (req, res) {
-    console.log("Server started at port 8000.");
+app.listen(process.env.PORT||5000, function (req, res) {
+    console.log("Server started at port 5000.");
 });

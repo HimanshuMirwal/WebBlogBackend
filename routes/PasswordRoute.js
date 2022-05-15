@@ -53,6 +53,7 @@ PasswordModel.findById(Obj)
 })
 
 Route.get("/sendpasswordtome",(req,res)=>{
+    console.log("Accessing send password to me.")
     PasswordModel.find()
         .then(val => {
                     let mailOptions = {
