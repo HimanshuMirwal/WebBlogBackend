@@ -10,8 +10,8 @@ var transporter = nodemailer.createTransport({
     }
 });
 
-Route.get("/getPassword",(req ,res)=>{
-    PasswordModel.find()
+Route.get("/getPassword",async (req ,res)=>{
+    await PasswordModel.find()
         .then(val => {
             res.json(val)
         }).catch(err => {
@@ -24,20 +24,20 @@ Route.post("/UpdatePassword",async function(req ,res){
  const  ID= req.body.ID;
  const  PASS= req.body.PASS;
  const Obj = SERVERID;
-PasswordModel.findById(Obj)
+    await PasswordModel.findById(Obj)
         .then(val => {
                 val.idAdmin=ID,
                 val.passAdmin=PASS
                 // console.log(val)
                 val.save()
-                .then(()=>{
+                .then(async ()=>{
                     let mailOptions = {
                         from: process.env.ADMIN_EMAIL,
                         to: process.env.ADMIN_EMAIL_Second,
                         subject: 'Password Changed',
                         html: "<div style='background:#FFE194;height:400px;text-align:center;padding:5%'><h1 style='color:#FFB319'>Hello Admin</h1><hr style='color:#FFB319;font-weight:bolder'></hr><br></br><h3 style='color:#22577A'>Your Id and Password has been changed, your new ID is "+ID+" and Password is "+ PASS+ "</h3></div>"
                     };
-                    transporter.sendMail(mailOptions, function (error, info) {
+                    await transporter.sendMail(mailOptions, function (error, info) {
                         if (error) {
                             console.log(error);
                         } else {
@@ -52,17 +52,17 @@ PasswordModel.findById(Obj)
         })
 })
 
-Route.get("/sendpasswordtome",(req,res)=>{
+Route.get("/sendpasswordtome",async (req,res)=>{
     console.log("Accessing send password to me.")
-    PasswordModel.find()
-        .then(val => {
+    await PasswordModel.find()
+        .then(async (val) => {
                     let mailOptions = {
                         from: process.env.ADMIN_EMAIL,
                         to: process.env.ADMIN_EMAIL_Second,
                         subject: 'Login Credentials',
                         html: "<div style='background:#FFE194;height:400px;text-align:center;padding:5%'><h1 style='color:#FFB319'>Hello Admin</h1><hr style='color:#FFB319;font-weight:bolder'></hr><br></br> your ID is <h3 style='color:#22577A'>"+val[0].idAdmin+"</h3> and Password is <h3 style='color:#22577A'>"+ val[0].passAdmin+ "</h3></div>"
                     };
-                    transporter.sendMail(mailOptions, function (error, info) {
+                    await transporter.sendMail(mailOptions, function (error, info) {
                         if (error) {
                             console.log(error);
                         } else {

@@ -9,14 +9,14 @@ var transporter = nodemailer.createTransport({
         pass: process.env.ADMIN_PASSWORD
     }
 });
-Route.post("/get", (req, res) => {
+Route.post("/get", async function(req, res) {
     const IDValue = req.body.ID;
     const PassValue = req.body.Pass;
     const Random = Math.floor(Math.random() * 1000);
     console.log(Random);
     // return ;
     RandomFunctionCall.RanomNumberCheck(Random);
-    PasswordModel.findOne({ idAdmin: IDValue })
+    await PasswordModel.findOne({ idAdmin: IDValue })
         .then(valServer => {
             console.log(valServer);
             if (IDValue === valServer.idAdmin && PassValue === valServer.passAdmin) {

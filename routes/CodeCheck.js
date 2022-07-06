@@ -4,7 +4,7 @@ const RanomNumberCheck = (val)=>{
     // console.log(val+" Random number");
     Code=val.toString();
 }
-Route.post("/sendcode", (req, res) => {
+Route.post("/sendcode",async (req, res) => {
     // console.log(Code+" Random number");
 
    const CodeCheck= req.body.dataValue;

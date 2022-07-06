@@ -3,25 +3,36 @@ const bodyParser = require("body-parser");
 const mongoose = require('mongoose');
 const cors = require("cors");
 const app = express();
+const Axios = require("axios");
+const qs = require("qs");
 
+
+const uri = "mongodb+srv://admin-himanshu:test123@cluster0.qewzz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+mongoose.set('useUnifiedTopology', true);
+mongoose.connect(uri,
+  { useUnifiedTopology: true,
+    useNewUrlParser: true 
+  }).then(()=>{
+  console.log("successfull")
+}).catch(Err=>{
+  console.log("Error occur", Err)
+});
 require('dotenv').config();
 
-app.use(cors({
-  origin:"*"
-}));
+app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 // app.use(express.static('public'));
 
 // const uri = "mongodb://127.0.0.1:27017/WebBlog";
-const uri = "mongodb+srv://admin-himanshu:test123@cluster0.qewzz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
-mongoose.set('useNewUrlParser', true);
-mongoose.set('useFindAndModify', false);
-mongoose.set('useCreateIndex', true);
-mongoose.set('useUnifiedTopology', true);
 
-mongoose.connect(uri);
+
+
 // MongoClient.connect(uri, { useUnifiedTopology: true, useNewUrlParser: true});
 
 
@@ -49,6 +60,42 @@ app.use("/notice",Notice);
 app.get("/", (req, res)=>{
     res.send("<h1> WebBlog </h1>");
 })
+app.post("/compile", (req, res) => {
+  //getting the required data from the request
+  let code = req.body.code;
+  let language = req.body.language;
+  let input = req.body.input;
+console.log(code)
+  if (language === "python") {
+      language="py"
+  }
+
+  let data = qs.stringify({
+      "code": code,
+      "language": language,
+      "input": input
+  });
+  let config = {
+      method: 'post',
+      url: "https://codex-api.herokuapp.com/",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+    },
+  data: data,
+  };
+  //calling the code compilation API
+  Axios(config)
+      .then((response)=>{
+            const message = response.data.success?response.data:response.data.error
+
+          res.send(message)
+          console.log("this is error message",response.data)
+      }).catch((error)=>{
+          console.log(error);
+          res.send(error)
+      });
+})
+
 app.listen(process.env.PORT||5000, function (req, res) {
     console.log("Server started at port 5000.");
 });
